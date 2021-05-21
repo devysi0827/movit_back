@@ -7,10 +7,11 @@ from django.db.models import JSONField
 class Movie(models.Model):
     adult = models.BooleanField(null=True, blank=True)
     backdrop_path = models.CharField(max_length=100, null=True, blank=True)
-    genre_ids = ArrayField(ArrayField(models.IntegerField()))
+    # views에서 처리하자
+    # genre_ids = ArrayField(ArrayField(models.IntegerField()))
     # genre_ids = JSONField(default=[] ,null=True, blank=True)
     # genre_ids = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
-    # genre_ids = models. 'genre_ids': [28, 12, 53, 10752], 
+    # genre_ids = models. 'genre_ids': [28/ 12/ 53/ 10752] 
     # movie_id = models.IntegerField()
     original_language = models.CharField(max_length=100, null=True, blank=True)
     original_title = models.CharField(max_length=100, null=True, blank=True)
