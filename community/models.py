@@ -5,6 +5,7 @@ class Review(models.Model):
     ## 트위터 모델!!!!!!
     # username 
     # like
+    title = models.CharField(max_length=200)
     content = models.TextField()
     # hashtag 
 
