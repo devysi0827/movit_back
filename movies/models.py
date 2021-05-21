@@ -11,7 +11,14 @@ class Movie(models.Model):
     # genre_ids = ArrayField(ArrayField(models.IntegerField()))
     # genre_ids = JSONField(default=[] ,null=True, blank=True)
     # genre_ids = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
-    # genre_ids = models. 'genre_ids': [28/ 12/ 53/ 10752] 
+    # genre_ids = models. 'genre_ids': [28/ 12/ 53/ 10752]
+    # 형규님네 python 미리 데이터를 받은 다음에 더미데이터를 json 그거를 불러와서 쓴다!
+    # 맨 처음에는 쓸 필요 x
+
+    # 일회성데이터에서는 vue에서 api를 불러오고////, 여러분 반복할 데이터, user가 포함된 데이터는 장고db를 사용한다.
+
+    # 정원님네 vue 시작할때 요청을 해서 받은 데이터 이걸 장고db에 저장을 해서 필요할때 확인한다. ==> 배열 받는 방법을 모르겠다(v)
+    # 
     # movie_id = models.IntegerField()
     original_language = models.CharField(max_length=100, null=True, blank=True)
     original_title = models.CharField(max_length=100, null=True, blank=True)
