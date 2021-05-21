@@ -1,10 +1,12 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 class Review(models.Model):
     ## 트위터 모델!!!!!!
-    # username 
+
     # like
+    # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     content = models.TextField()
     # hashtag 
