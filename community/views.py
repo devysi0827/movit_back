@@ -5,7 +5,10 @@ from rest_framework import serializers
 from rest_framework.decorators import api_view # ,permission_classes
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.auth import get_user_model
 # from rest_framework.permissions import IsAuthenticated
+
+User = get_user_model()
 
 @api_view(['GET', 'POST'])
 def review_index_or_create(request):
@@ -16,9 +19,10 @@ def review_index_or_create(request):
        
     elif request.method == "POST":
         serializer = ReviewSerializer(data = request.data)
+        my_user =User.objects.filter(username=request.data["UserName"])
         if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data, status= status.HTTP_201_CREATED)        
+            serializer.save(user=my_user[0])
+            return Response(serializer.data, status= status.HTTP_201_CREATED)         
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def review_detail_or_update_or_delete(request, review_pk):
