@@ -1,3 +1,4 @@
+import re
 from django.shortcuts import get_object_or_404
 from .models import Review, ReviewComment
 from .serializers import ReviewSerializer, ReviewCommentSerializer
@@ -18,13 +19,17 @@ def review_index_or_create(request):
         return Response(serializer.data)
        
     elif request.method == "POST":
+        print(1)
+        print(request)
+        print(request.data)
+        print(2)
         serializer = ReviewSerializer(data = request.data)
         my_user =User.objects.filter(username=request.data["UserName"])
         # print(1)
         # print(request.data)
-        # print(my_user[0])
+        print(my_user[0].email)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(user=my_user[0], nickname= my_user[0].nickname, username=request.data["UserName"])
+            serializer.save(user=my_user[0], nickname= my_user[0].nickname, username=request.data["UserName"], email=my_user[0].email)
             print(serializer.data)
             return Response(serializer.data, status= status.HTTP_201_CREATED)         
 
@@ -43,6 +48,8 @@ def review_detail_or_update_or_delete(request, review_pk):
             return Response(serializer.data)
 
     elif request.method == "DELETE":
+        write_user = Review.objects.filter(id=review.pk)
+        print(write_user[0].user_id)
         review.delete()
         data = {
             "success" : True,
@@ -60,9 +67,12 @@ def review_comment_index_or_create(request, review_pk):
         return Response(serializer.data)
 
     elif request.method == "POST":
+        my_user =User.objects.filter(username=request.data["UserName"])
+        print(11111)
+        print(my_user)
         serializer = ReviewCommentSerializer(data= request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(review=review)
+            serializer.save(review=review, user=my_user[0],nickname= my_user[0].nickname, username=request.data["UserName"], email=my_user[0].email)
             return Response(serializer.data, status= status.HTTP_201_CREATED)
 
 
@@ -82,6 +92,7 @@ def review_comment_detail_or_update_or_delete(request, review_pk, comment_pk):
             return Response(serializer.data)
 
     elif request.method == "DELETE":
+        # print(revi)
         comment.delete()
         data = {
             "success" : True,

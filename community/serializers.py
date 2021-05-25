@@ -11,4 +11,4 @@ class ReviewSerializer(serializers.ModelSerializer):
 class ReviewCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReviewComment
-        exclude = ('review',)
+        exclude = ('review','user',)
