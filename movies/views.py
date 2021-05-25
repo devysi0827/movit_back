@@ -86,18 +86,32 @@ def movie_rank_detail_or_update_or_delete(request, movie_pk, movie_rank_pk):
 def movies_save(request):
     get_movies = 'https://api.themoviedb.org/3/movie/popular?api_key=6b1e9899f17fa92429f5a793999dcb8f'
     response = requests.get(get_movies).json()
-    # # print(1)
-    # # print(response['results'])
     for i in range(20):
         # print(2)
         now_movie = response['results'][i]
         genre_ids = str(now_movie['genre_ids'])
+        # print(1)
+        # print(now_movie['title'])
+        # print(now_movie['id'])
         movie = {
             'title':now_movie['title'],
             'genre_ids':genre_ids,
+            'adult': now_movie['adult'],
+            'backdrop_path': now_movie['backdrop_path'],
+            'movie_id': now_movie['id'],
+            'original_language': now_movie['original_language'],
+            'original_title': now_movie['original_title'],
+            'overview': now_movie['overview'],
+            'popularity': now_movie['popularity'],
+            'poster_path': now_movie['poster_path'],
+            'release_date': now_movie['release_date'],
+            'video': now_movie['video'],
+            'vote_average': now_movie['vote_average'],
+            'vote_count': now_movie['vote_count'],
         }
-        # print(now_movie)
         serializer = MovieSerializer(data=movie)
+        # print(2)
+        # print(serializer)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
     data = {

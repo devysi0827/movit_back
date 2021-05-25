@@ -55,7 +55,7 @@ def review_comment_index_or_create(request, review_pk):
     review = get_object_or_404(Review, pk = review_pk)
 
     if request.method == "GET":
-        review_comments = ReviewComment.objects.all()
+        review_comments = ReviewComment.objects.filter(review_id = review_pk)
         serializer = ReviewCommentSerializer(review_comments, many=True)
         return Response(serializer.data)
 
