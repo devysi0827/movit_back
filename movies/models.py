@@ -11,7 +11,8 @@ class Movie(models.Model):
     # genre_ids = ArrayField(ArrayField(models.IntegerField()))
     # genre_ids = JSONField(default=[] ,null=True, blank=True)
     # genre_ids = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
-    # genre_ids = models. 'genre_ids': [28/ 12/ 53/ 10752]
+    genre_ids = models.CharField(max_length=200)
+    # 'genre_ids': [28/ 12/ 53/ 10752]
     # 형규님네 python 미리 데이터를 받은 다음에 더미데이터를 json 그거를 불러와서 쓴다!
     # 맨 처음에는 쓸 필요 x
 

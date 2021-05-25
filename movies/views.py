@@ -5,6 +5,8 @@ from rest_framework.decorators import api_view
 #from rest_framework.decorators import authentication_classes, permission_classes
 from .models import Movie, MovieRank
 from .serializers import MovieSerializer, MovieRankSerializer
+import json
+import requests
 
 @api_view(['GET', 'POST'])
 def movie_index_or_create(request):
@@ -80,8 +82,27 @@ def movie_rank_detail_or_update_or_delete(request, movie_pk, movie_rank_pk):
         }
         return Response(data, status=status.HTTP_204_NO_CONTENT)    
 
+@api_view(['GET'])
+def movies_save(request):
+    get_movies = 'https://api.themoviedb.org/3/movie/popular?api_key=6b1e9899f17fa92429f5a793999dcb8f'
+    response = requests.get(get_movies).json()
+    # # print(1)
+    # # print(response['results'])
+    for i in range(20):
+        # print(2)
+        now_movie = response['results'][i]
+        genre_ids = str(now_movie['genre_ids'])
+        movie = {
+            'title':now_movie['title'],
+            'genre_ids':genre_ids,
+        }
+        # print(now_movie)
+        serializer = MovieSerializer(data=movie)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+    data = {
+            "save" : True,
+        } 
+    return Response(data)
 
-        
-
-        
       

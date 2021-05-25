@@ -20,8 +20,12 @@ def review_index_or_create(request):
     elif request.method == "POST":
         serializer = ReviewSerializer(data = request.data)
         my_user =User.objects.filter(username=request.data["UserName"])
+        # print(1)
+        # print(request.data)
+        # print(my_user[0])
         if serializer.is_valid(raise_exception=True):
-            serializer.save(user=my_user[0])
+            serializer.save(user=my_user[0], nickname= my_user[0].nickname, username=request.data["UserName"])
+            print(serializer.data)
             return Response(serializer.data, status= status.HTTP_201_CREATED)         
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -46,7 +50,6 @@ def review_detail_or_update_or_delete(request, review_pk):
         }
         return Response(data, status=status.HTTP_204_NO_CONTENT)
 
-########################################
 @api_view(['GET','POST'])
 def review_comment_index_or_create(request, review_pk):
     review = get_object_or_404(Review, pk = review_pk)
