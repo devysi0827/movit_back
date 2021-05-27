@@ -120,4 +120,22 @@ def review_comment_detail_or_update_or_delete(request, review_pk, comment_pk):
                 "success" : False,
                 "message" : "코멘트삭제실패"
             }
-            return Response(data)   
+            return Response(data)  
+
+@api_view(['POST'])
+def review_data(request):
+    my_reviews =Review.objects.filter(username=request.data["UserName"])
+    data = [] 
+    for i in range(len(my_reviews)):
+        review_json = {
+            "nickname":my_reviews[i].nickname,
+            "username":my_reviews[i].username,
+            "email": my_reviews[i].email,
+            "id":my_reviews[i].id,
+            "title": my_reviews[i].title,
+            "content":  my_reviews[i].content,
+            "created_at": my_reviews[i].created_at,
+            "updated_at": my_reviews[i].updated_at
+            }
+        data.append(review_json)
+    return Response(data)
