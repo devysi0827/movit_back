@@ -86,12 +86,13 @@ def movie_rank_detail_or_update_or_delete(request, movie_pk, movie_rank_pk):
 
 @api_view(['POST'])
 def get_movie_info(request):
-    print(request.data)
+    # print(request.data)
     my_movie =Movie.objects.filter(title=request.data["movietitle"])
-    print(my_movie[0].id)
+    # print(my_movie[0].id)
     data = {
             "success" : True,
-            "movie_pk" : my_movie[0].id
+            "movie_pk" : my_movie[0].id,
+            "vote_average": my_movie[0].vote_average
         }
     return Response(data) 
 
@@ -111,36 +112,39 @@ def get_rank_info(request):
 
 @api_view(['GET'])
 def movies_save(request):
-    get_movies = 'https://api.themoviedb.org/3/movie/popular?api_key=6b1e9899f17fa92429f5a793999dcb8f'
-    response = requests.get(get_movies).json()
-    for i in range(20):
-        # print(2)
-        now_movie = response['results'][i]
-        genre_ids = str(now_movie['genre_ids'])
-        # print(1)
-        # print(now_movie['title'])
-        # print(now_movie['id'])
-        movie = {
-            'title':now_movie['title'],
-            'genre_ids':genre_ids,
-            'adult': now_movie['adult'],
-            'backdrop_path': now_movie['backdrop_path'],
-            'movie_id': now_movie['id'],
-            'original_language': now_movie['original_language'],
-            'original_title': now_movie['original_title'],
-            'overview': now_movie['overview'],
-            'popularity': now_movie['popularity'],
-            'poster_path': now_movie['poster_path'],
-            'release_date': now_movie['release_date'],
-            'video': now_movie['video'],
-            'vote_average': now_movie['vote_average'],
-            'vote_count': now_movie['vote_count'],
-        }
-        serializer = MovieSerializer(data=movie)
-        # print(2)
-        # print(serializer)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
+    for j in range(1,7):
+        print(25555555555555)
+        get_movies = 'https://api.themoviedb.org/3/movie/popular?api_key=6b1e9899f17fa92429f5a793999dcb8f&page='+str(j)
+        print(j)
+        print(get_movies)
+        response = requests.get(get_movies).json()
+        for i in range(20):
+            
+            now_movie = response['results'][i]
+            genre_ids = str(now_movie['genre_ids'])
+            
+            movie = {
+                'title':now_movie['title'],
+                'genre_ids':genre_ids,
+                'adult': now_movie['adult'],
+                'backdrop_path': now_movie['backdrop_path'],
+                'movie_id': now_movie['id'],
+                'original_language': now_movie['original_language'],
+                'original_title': now_movie['original_title'],
+                'overview': now_movie['overview'],
+                'popularity': now_movie['popularity'],
+                'poster_path': now_movie['poster_path'],
+                'release_date': now_movie.get('release_date'),
+                'video': now_movie['video'],
+                'vote_average': now_movie['vote_average'],
+                'vote_count': now_movie['vote_count'],
+            }
+            serializer = MovieSerializer(data=movie)
+            # print(2)
+            # print(serializer)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+        get_movies = 'https://api.themoviedb.org/3/movie/popular?api_key=6b1e9899f17fa92429f5a793999dcb8f&page='
     data = {
             "save" : True,
         } 
