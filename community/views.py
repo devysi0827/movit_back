@@ -42,20 +42,32 @@ def review_detail_or_update_or_delete(request, review_pk):
         return Response(serializer.data)
 
     elif request.method == "PUT":
+        print(111)
         serializer = ReviewSerializer(instance = review , data= request.data)
+        print(serializer)
         if serializer.is_valid(raise_exception=True):
             serializer.save(review = review)
             return Response(serializer.data)
 
     elif request.method == "DELETE":
         write_user = Review.objects.filter(id=review.pk)
-        print(write_user[0].user_id)
-        review.delete()
-        data = {
-            "success" : True,
-            "message" : "리뷰삭제"
-        }
-        return Response(data, status=status.HTTP_204_NO_CONTENT)
+        my_user =User.objects.filter(username=request.data["UserName"])
+        # print(request.data["UserName"])
+        # print(write_user[0].username)
+        # print(my_user[0])
+        if str(my_user[0]) == str(write_user[0].username):
+            review.delete()
+            data = {
+                "success" : True,
+                "message" : "리뷰삭제"
+            }
+            return Response(data, status=status.HTTP_204_NO_CONTENT)
+        else:
+            data = {
+                "success" : False,
+                "message" : "리뷰삭제실패"
+            }
+            return Response(data)
 
 @api_view(['GET','POST'])
 def review_comment_index_or_create(request, review_pk):
@@ -92,10 +104,20 @@ def review_comment_detail_or_update_or_delete(request, review_pk, comment_pk):
             return Response(serializer.data)
 
     elif request.method == "DELETE":
-        # print(revi)
-        comment.delete()
-        data = {
-            "success" : True,
-            "message" : "comment 삭제완료"
-        }
-        return Response(data, status=status.HTTP_204_NO_CONTENT)    
+        write_user = ReviewComment.objects.filter(id=comment.pk)
+        my_user =User.objects.filter(username=request.data["UserName"])
+        print(write_user[0].username)
+        print(my_user[0])
+        if str(my_user[0]) == str(write_user[0].username):
+            comment.delete()
+            data = {
+                "success" : True,
+                "message" : "코멘트삭제"
+            }
+            return Response(data, status=status.HTTP_204_NO_CONTENT)
+        else:
+            data = {
+                "success" : False,
+                "message" : "코멘트삭제실패"
+            }
+            return Response(data)   
