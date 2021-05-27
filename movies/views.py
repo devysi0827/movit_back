@@ -48,12 +48,14 @@ def movie_rank_index_or_create(request, movie_pk):
     movie = get_object_or_404(Movie, pk =movie_pk)
     
     if request.method == "GET":
-        movie_ranks = MovieRank.objects.all()
+        movie_ranks = MovieRank.objects.filter(movie_id=movie_pk)
         serializer = MovieRankSerializer(movie_ranks, many=True)
         return Response(serializer.data)
 
     elif request.method == "POST":
+        print(request.data)
         serializer = MovieRankSerializer(data= request.data)
+        print(serializer)
         if serializer.is_valid(raise_exception=True):
             serializer.save(movie=movie)
             return Response(serializer.data, status= status.HTTP_201_CREATED)
@@ -80,7 +82,32 @@ def movie_rank_detail_or_update_or_delete(request, movie_pk, movie_rank_pk):
             "success" : True,
             "message" : "rank 삭제완료"
         }
-        return Response(data, status=status.HTTP_204_NO_CONTENT)    
+        return Response(data, status=status.HTTP_204_NO_CONTENT) 
+
+@api_view(['POST'])
+def get_movie_info(request):
+    print(request.data)
+    my_movie =Movie.objects.filter(title=request.data["movietitle"])
+    print(my_movie[0].id)
+    data = {
+            "success" : True,
+            "movie_pk" : my_movie[0].id
+        }
+    return Response(data) 
+
+@api_view(['POST'])
+def get_rank_info(request):
+ 
+    my_movie =MovieRank.objects.filter(movie_id=request.data["movie_id"])
+   
+    data = {
+            "success" : True,
+            "movie_id": my_movie[0].movie_id,
+            "rank":my_movie[0].rank,
+            "rank_pk" : my_movie[0].id
+        }
+
+    return Response(data) 
 
 @api_view(['GET'])
 def movies_save(request):
