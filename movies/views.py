@@ -113,10 +113,7 @@ def get_rank_info(request):
 @api_view(['GET'])
 def movies_save(request):
     for j in range(1,7):
-        print(25555555555555)
-        get_movies = 'https://api.themoviedb.org/3/movie/popular?api_key=6b1e9899f17fa92429f5a793999dcb8f&page='+str(j)
-        print(j)
-        print(get_movies)
+        get_movies = 'https://api.themoviedb.org/3/movie/popular?api_key={your_key}&page='+str(j)
         response = requests.get(get_movies).json()
         for i in range(20):
             
@@ -140,11 +137,9 @@ def movies_save(request):
                 'vote_count': now_movie['vote_count'],
             }
             serializer = MovieSerializer(data=movie)
-            # print(2)
-            # print(serializer)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
-        get_movies = 'https://api.themoviedb.org/3/movie/popular?api_key=6b1e9899f17fa92429f5a793999dcb8f&page='
+        get_movies = 'https://api.themoviedb.org/3/movie/popular?api_key={your_key}&page='
     data = {
             "save" : True,
         } 
